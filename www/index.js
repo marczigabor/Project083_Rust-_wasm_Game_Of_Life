@@ -6,15 +6,51 @@ const GRID_COLOR = "#CCCCCC";
 const DEAD_COLOR = "#FFFFFF";
 const ALIVE_COLOR = "#000000";
 
-const universe = Universe.new();
-const width = universe.width();
-const height = universe.height();
-
 const canvas = document.getElementById("game-of-life-canvas");
-canvas.height = (CELL_SIZE + 1) * height + 1;
-canvas.width = (CELL_SIZE + 1) * width + 1;
+let ctx = null;
 
-const ctx = canvas.getContext('2d');
+const setCanvas = () => {
+  canvas.height = (CELL_SIZE + 1) * height + 1;
+  canvas.width = (CELL_SIZE + 1) * width + 1;
+  ctx = canvas.getContext('2d');
+}
+
+
+let width = parseInt(document.getElementById("width-input").value);
+let height = parseInt(document.getElementById("height-input").value);
+
+let universe = null;
+
+const setUniverse = () => {
+  universe = Universe.new(width, height);
+  width = universe.width();
+  height = universe.height();
+  setCanvas();
+};
+
+//#region input
+
+
+document.getElementById("width-input").addEventListener("change", (event)=> {
+  
+  if (event && event.target && Number.isInteger(parseInt(event.target.value))) {
+    universe.set_width(event.target.value);
+    width = universe.width();
+    setUniverse();
+  }
+
+
+});
+
+document.getElementById("height-input").addEventListener("change", (event)=> {
+  if (event && event.target && Number.isInteger(parseInt(event.target.value))) {
+    universe.set_height(event.target.value);
+    height = universe.height();
+    setUniverse();
+  }
+});
+  
+//#endregion
 
 //#region render
 
@@ -184,6 +220,7 @@ canvas.addEventListener("click", event => {
 
 //#endregion
 
+setUniverse();
 drawGrid();
 drawCells();
 play();

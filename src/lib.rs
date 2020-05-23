@@ -72,6 +72,7 @@ impl Universe {
         let idx = self.get_index(row, column);
         self.cells[idx].toggle();
     }    
+
     pub fn tick(&mut self) {
         let mut next = self.cells.clone();
 
@@ -115,11 +116,11 @@ impl Universe {
         self.cells = next;
     }
 
-    pub fn new() -> Universe {
+    pub fn new(width: u32, height: u32) -> Universe {
         utils::set_panic_hook();
 
-        let width = 64;
-        let height = 64;
+        let width = width;
+        let height = height;
        
         let cells = (0..width * height)
             .map(|_| {
